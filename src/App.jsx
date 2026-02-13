@@ -8,9 +8,28 @@ function App() {
   const [showMedia, setShowMedia] = useState(false);
 
   const date = "14 February 2019";
-
   const message =
     "On this Black Day, we remember the brave souls who sacrificed everything for our nation. Their courage will never fade.";
+
+  // Logic to share the link
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Black Day Tribute',
+      text: 'I created this special tribute. Take a look.',
+      url: window.location.href, 
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        alert('Link copied to clipboard! Share it with your friends.');
+      }
+    } catch (err) {
+      console.log('Error sharing:', err);
+    }
+  };
 
   const moveNoButton = () => {
     const x = Math.random() * (window.innerWidth - 150);
@@ -38,7 +57,6 @@ function App() {
 
   return (
     <div className="container">
-
       {/* Snow Effect */}
       <div className="snow">
         {Array.from({ length: 60 }).map((_, i) => (
@@ -56,10 +74,8 @@ function App() {
       {step === 1 && (
         <div className="center-box">
           <h1>🖤 Do You Remember Them? 🖤</h1>
-
           <div className="button-wrapper">
             <button onClick={() => setStep(2)}>YES 🖤</button>
-
             <button
               style={noStyle}
               onMouseEnter={moveNoButton}
@@ -74,7 +90,6 @@ function App() {
         <div className="center-box">
           <h1>Black Day Tribute</h1>
           <h3 className="date">{date}</h3>
-
           <p className="typed-text">{typedText}</p>
 
           {!showMedia && (
@@ -91,14 +106,11 @@ function App() {
 
           {showMedia && (
             <div className="media-section">
-
-              {/* Images */}
               <div className="image-section">
                 <img src="/images/martyr1.jpg" alt="martyr" />
                 <img src="/images/martyr2.jpg" alt="martyr" />
               </div>
 
-              {/* YouTube Video */}
               <div className="video-section">
                 <iframe
                   src="https://www.youtube.com/embed/3YwseXHZjTM"
@@ -113,6 +125,25 @@ function App() {
                   <div className="flame"></div>
                 </div>
                 <h2>Their sacrifice will never be forgotten.</h2>
+                
+                {/* --- NEW SHARE BUTTON --- */}
+                <button 
+                  onClick={handleShare}
+                  className="share-btn"
+                  style={{
+                    marginTop: '20px',
+                    padding: '10px 20px',
+                    backgroundColor: '#fff',
+                    color: '#000',
+                    border: 'none',
+                    borderRadius: '20px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer'
+                  }}
+                >
+                  📤 Share this tribute
+                </button>
+                {/* ------------------------ */}
               </div>
             </div>
           )}
